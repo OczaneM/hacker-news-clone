@@ -1,4 +1,4 @@
-# Hacker News Clone assignment
+# Hacker News Clone
 
 ## Setup
 
