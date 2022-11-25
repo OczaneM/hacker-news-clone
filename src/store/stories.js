@@ -8,6 +8,7 @@ export const getNewStories = createAsyncThunk(
   "stories/getNewStories",
   async () => {
     try {
+      // ordered by date, descending
       const newStoriesRes = await axios
         .get(newStoriesUrl)
         .then((res) => res.data)
@@ -36,6 +37,7 @@ export const storiesSlice = createSlice({
     summaries: {},
     idsStatus: "pending",
     statusBySummary: {},
+    visible: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -45,6 +47,7 @@ export const storiesSlice = createSlice({
       })
       .addCase(getNewStories.fulfilled, (state, action) => {
         state.ids = action.payload
+        state.visible = action.payload.slice(0, 12)
         state.idsStatus = "fulfilled"
       })
       .addCase(getNewStories.rejected, (state) => {
@@ -56,7 +59,7 @@ export const storiesSlice = createSlice({
         state.statusBySummary[action.meta.arg] = "pending"
       })
       .addCase(getStory.fulfilled, (state, action) => {
-        state.summaries[action.meta.arg] = JSON.stringify(action.payload)
+        state.summaries[action.meta.arg] = action.payload
         state.statusBySummary[action.meta.arg] = "fulfilled"
       })
       .addCase(getStory.rejected, (state, action) => {

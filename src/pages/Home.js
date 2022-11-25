@@ -3,11 +3,17 @@ import { useSelector } from "react-redux"
 import StorySummary from "../components/StorySummary"
 
 const Home = () => {
-  const storyIds = useSelector((state) => state.stories.ids) || []
+  const areStoriesLoading =
+    useSelector((state) => state.stories.idsStatus) === "pending"
+  const storyIdsVisible = useSelector((state) => state.stories.visible) || []
 
-  return storyIds.map((storyId) => {
-    return <StorySummary key={storyId} storyId={storyId} />
-  })
+  return areStoriesLoading
+    ? "Loading"
+    : storyIdsVisible.map((storyId, index) => {
+        return (
+          <StorySummary key={storyId} storyId={storyId} index={index + 1} />
+        )
+      })
 }
 
 export default Home
