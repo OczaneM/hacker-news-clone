@@ -18,24 +18,49 @@ export const getNewStories = createAsyncThunk(
   }
 )
 
+export const getStory = createAsyncThunk("stories/getStory", async (id) => {
+  try {
+    const story = await axios
+      .get(`${baseUrl}/item/${id}.json?print=pretty`)
+      .then((res) => res.data)
+    return story
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 export const storiesSlice = createSlice({
   name: "stories",
   initialState: {
     ids: [],
-    status: "pending",
+    summaries: {},
+    idsStatus: "pending",
+    statusBySummary: {},
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getNewStories.pending, (state) => {
-        state.status = "pending"
+        state.idsStatus = "pending"
       })
       .addCase(getNewStories.fulfilled, (state, action) => {
         state.ids = action.payload
-        state.status = "fulfilled"
+        state.idsStatus = "fulfilled"
       })
       .addCase(getNewStories.rejected, (state) => {
-        state.status = "rejected"
+        state.idsStatus = "rejected"
+      })
+
+    builder
+      .addCase(getStory.pending, (state, action) => {
+        state.statusBySummary[action.meta.arg] = "pending"
+      })
+      .addCase(getStory.fulfilled, (state, action) => {
+        state.summaries[action.meta.arg] = JSON.stringify(action.payload)
+        state.statusBySummary[action.meta.arg] = "fulfilled"
+      })
+      .addCase(getStory.rejected, (state, action) => {
+        state.statusBySummary[action.meta.arg] = "rejected"
       })
   },
 })

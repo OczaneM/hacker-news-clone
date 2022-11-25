@@ -6,7 +6,7 @@ import Home from "../pages/Home"
 // This is where app initialization occurs
 // Renders routes
 const Main = () => {
-  const newStoriesStatus = useSelector((state) => state.stories.status)
+  const newStoriesStatus = useSelector((state) => state.stories.idsStatus)
   const dispatch = useDispatch()
 
   useEffect(() => {
