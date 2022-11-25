@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import StorySummary from "../containers/StorySummary"
+import StorySummary from "../components/StorySummary"
 
 const Home = () => {
   const storyIds = useSelector((state) => state.stories.ids) || []

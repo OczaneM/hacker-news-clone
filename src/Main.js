@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getNewStories } from "../store/stories"
-import Home from "../pages/Home"
+import { getNewStories } from "./store/stories"
+import Routes from "./routes"
 
 // This is where app initialization occurs
 // Renders routes
@@ -13,7 +13,7 @@ const Main = () => {
     if (newStoriesStatus === "pending") dispatch(getNewStories())
   }, [])
 
-  return <Home />
+  return <Routes />
 }
 
 export default Main
