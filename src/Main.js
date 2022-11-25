@@ -6,11 +6,12 @@ import Routes from "./routes"
 // This is where app initialization occurs
 // Renders routes
 const Main = () => {
-  const newStoriesStatus = useSelector(getFetchStatusForAllStoryIds)
+  const storiesFetchSuccess =
+    useSelector(getFetchStatusForAllStoryIds) === "fulfilled"
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (newStoriesStatus === "pending") dispatch(getNewStories())
+    if (!storiesFetchSuccess) dispatch(getNewStories())
   }, [])
 
   return <Routes />
