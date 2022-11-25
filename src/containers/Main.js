@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { getNewStories } from "../api/stories"
+import StorySummary from "./StorySummary"
 
 const Main = () => {
-  const [latestStories, setLatestStories] = useState([])
+  const [latestStoriesIds, setLatestStoriesIds] = useState([])
 
   useEffect(() => {
-    getNewStories().then((stories) => setLatestStories(stories))
+    getNewStories().then((stories) => setLatestStoriesIds(stories.slice(0, 2)))
   }, [])
 
-  return <div>{latestStories}</div>
+  return latestStoriesIds.map((storyId) => {
+    return <StorySummary key={storyId} storyId={storyId} />
+  })
 }
 
 export default Main
