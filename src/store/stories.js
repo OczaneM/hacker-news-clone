@@ -33,40 +33,50 @@ export const getStory = createAsyncThunk("stories/getStory", async (id) => {
 export const storiesSlice = createSlice({
   name: "stories",
   initialState: {
-    ids: [],
-    summaries: {},
-    idsStatus: "pending",
-    statusBySummary: {},
+    allIds: [],
+    byId: {},
+    allIdsStatus: "pending",
+    statusById: {},
     visible: [],
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getNewStories.pending, (state) => {
-        state.idsStatus = "pending"
+        state.allIdsStatus = "pending"
       })
       .addCase(getNewStories.fulfilled, (state, action) => {
         state.ids = action.payload
         state.visible = action.payload.slice(0, 12)
-        state.idsStatus = "fulfilled"
+        state.allIdsStatus = "fulfilled"
       })
       .addCase(getNewStories.rejected, (state) => {
-        state.idsStatus = "rejected"
+        state.allIdsStatus = "rejected"
       })
 
     builder
       .addCase(getStory.pending, (state, action) => {
-        state.statusBySummary[action.meta.arg] = "pending"
+        state.statusById[action.meta.arg] = "pending"
       })
       .addCase(getStory.fulfilled, (state, action) => {
-        state.summaries[action.meta.arg] = action.payload
-        state.statusBySummary[action.meta.arg] = "fulfilled"
+        state.byId[action.meta.arg] = action.payload
+        state.statusById[action.meta.arg] = "fulfilled"
       })
       .addCase(getStory.rejected, (state, action) => {
-        state.statusBySummary[action.meta.arg] = "rejected"
+        state.statusById[action.meta.arg] = "rejected"
       })
   },
 })
+
+export const getFetchStatusForAllStoryIds = (state) =>
+  state.stories.allIdsStatus
+
+export const getFetchStatusForStoryById = (state, id) =>
+  state.stories.statusById[id] || "pending"
+
+export const getStoryById = (state, id) => state.stories.byId[id] || {}
+
+export const getAllVisibleStoryIds = (state) => state.stories.visible
 
 // Action creators are generated for each case reducer function
 // export const {} = storiesSlice.actions

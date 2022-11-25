@@ -1,25 +1,34 @@
 import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
-import { getStory } from "../store/stories"
+import {
+  getStory,
+  getStoryById,
+  getFetchStatusForStoryById,
+} from "../store/stories"
 
 const StorySummary = ({ storyId, index, isSaved }) => {
   const dispatch = useDispatch()
-  const storySummaryStatus =
-    useSelector((state) => state.stories.statusBySummary[storyId]) || "pending"
-  const { by, descendants, score, time, title, url } =
-    useSelector((state) => state.stories.summaries[storyId]) || {}
+  const storyFetchSuccess =
+    useSelector((state) => getFetchStatusForStoryById(state, storyId)) ===
+    "fulfilled"
+  const { by, descendants, score, time, title, url } = useSelector((state) =>
+    getStoryById(state, storyId)
+  )
 
   useEffect(() => {
-    if (storySummaryStatus === "pending") dispatch(getStory(storyId))
+    if (!storyFetchSuccess) dispatch(getStory(storyId))
   }, [])
 
   return (
     <div>
-      {storySummaryStatus === "fulfilled" ? (
-        <div className="story-summary">
+      {storyFetchSuccess ? (
+        <div className="story-container">
           <div className="heading">
-            {index}. <span className="title">{title}</span>{" "}
+            {index}.{" "}
+            <a href={url} className="titlelink">
+              {title}
+            </a>{" "}
             <span className="source">({url})</span>
           </div>
           <div className="body">
