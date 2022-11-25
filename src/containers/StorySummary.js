@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
-import { getStory } from "../api/stories"
+// import { useSelector, useDispatch } from "react-redux"
 
 const StorySummary = ({ storyId }) => {
-  const [summary, setSummary] = useState("")
-
-  useEffect(() => {
-    getStory(storyId).then((story) => setSummary(JSON.stringify(story)))
-  }, [])
-
-  return <div>{summary}</div>
+  return <div>{storyId}</div>
 }
 
 StorySummary.propTypes = {

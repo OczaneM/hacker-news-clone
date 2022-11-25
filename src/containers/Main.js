@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react"
-import { getNewStories } from "../api/stories"
-import StorySummary from "./StorySummary"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { getNewStories } from "../store/stories"
+import Home from "../pages/Home"
 
+// This is where app initialization occurs
+// Renders routes
 const Main = () => {
-  const [latestStoriesIds, setLatestStoriesIds] = useState([])
+  const newStoriesStatus = useSelector((state) => state.stories.status)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    getNewStories().then((stories) => setLatestStoriesIds(stories.slice(0, 2)))
+    if (newStoriesStatus === "pending") dispatch(getNewStories())
   }, [])
 
-  return latestStoriesIds.map((storyId) => {
-    return <StorySummary key={storyId} storyId={storyId} />
-  })
+  return <Home />
 }
 
 export default Main
